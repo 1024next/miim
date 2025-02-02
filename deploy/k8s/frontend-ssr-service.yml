@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-ssr-service
+spec:
+  selector:
+    app: frontend # 选择器，用来标识与该服务相关的 Pod（部署中的容器实例）
+  ports:
+    - protocol: TCP
+      port: 80 # 外部访问的端口
+      targetPort: 3000 # 容器内部监听的端口，Node.js 默认使用 3000
+  type: LoadBalancer # LoadBalancer 类型使得服务可以公开暴露（适用于云环境）
