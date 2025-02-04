@@ -34,7 +34,6 @@ export default function MarkdownEditor() {
     (before: string, after: string, moveToNewLine = true) => {
       const editor = editorRef.current;
       if (!editor) return;
-
       const start = editor.selectionStart; // 获取选中文本的起始位置
       const end = editor.selectionEnd; // 获取选中文本的结束位置
       const selectedText = markdown.substring(start, end); // 获取选中的文本

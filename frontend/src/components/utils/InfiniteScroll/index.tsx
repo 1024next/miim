@@ -1,14 +1,16 @@
 import { useEffect, useRef } from "react";
 
 type InfiniteScrollProps = {
-  loadMore: () => void; // 加载更多数据的函数
-  isLoading: boolean; // 是否正在加载
-  children: React.ReactNode; // 需要包裹的子元素
+  loadMore: () => void; // Function to load more data
+  isLoading: boolean; // Whether loading is in progress
+  hasMore: boolean; // Whether more data is available
+  children: React.ReactNode; // Child elements to be wrapped
 };
 
 const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   loadMore,
   isLoading,
+  hasMore,
   children,
 }) => {
   const triggerRef = useRef<HTMLDivElement | null>(null);
@@ -17,29 +19,30 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (entry.isIntersecting && !isLoading) {
-          console.log(123123);
 
-          loadMore(); // 当元素进入视口时，调用 loadMore 函数加载更多数据
+        // Ensure loadMore is only triggered when it's visible, and loading isn't already happening
+        if (entry.isIntersecting && !isLoading && hasMore) {
+          console.log("Load more triggered"); // Debugging to check loadMore is called
+          loadMore(); // Trigger loading more data when element is in view
         }
       },
       {
-        rootMargin: "100px", // 提前加载 100px
-        threshold: 1.0, // 可以根据需要设置触发的比例
+        rootMargin: "100px", // Trigger load 100px before the element is in view
+        threshold: 0.5, // Trigger when 50% of the trigger element is in view
       }
     );
 
     const triggerElement = triggerRef.current;
     if (triggerElement) {
-      observer.observe(triggerElement);
+      observer.observe(triggerElement); // Start observing the trigger element
     }
 
     return () => {
       if (triggerElement) {
-        observer.unobserve(triggerElement);
+        observer.unobserve(triggerElement); // Clean up the observer when component unmounts
       }
     };
-  }, [isLoading, loadMore]);
+  }, [isLoading, hasMore, loadMore]);
 
   return (
     <div>
@@ -52,9 +55,16 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          textAlign: "center",
         }}
       >
-        {isLoading ? <p>Loading...</p> : <p>Scroll down to load more...</p>}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : hasMore ? (
+          <p>Scroll down to load more...</p>
+        ) : (
+          <p>No more data to load.</p>
+        )}
       </div>
     </div>
   );
