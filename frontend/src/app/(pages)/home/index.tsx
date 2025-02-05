@@ -8,6 +8,8 @@ import Counter from "@/components/utils/Counter";
 import Auth from "@/components/utils/Auth";
 import TodoList from "@/components/utils/TodoList";
 import ThemeSwitcher from "@/components/utils/ThemeSwitcher";
+import useDebounce from "@/hooks/useDebounce"; // 引入 useDebounce
+
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
@@ -15,6 +17,7 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(true);
   const page_size = 10;
 
+  // 加载帖子列表的函数
   const loadPosts = useCallback(
     async (page: number) => {
       if (isLoading) return;
@@ -23,7 +26,7 @@ export default function Home() {
         const res = await CommonApi.getPostList({ page, page_size });
         const newPosts = res?.data?.list || [];
         if (newPosts.length < page_size) {
-          setHasMore(false); // no more posts to load
+          setHasMore(false); // 没有更多帖子可以加载
         }
         setPosts((prevPosts) => [...prevPosts, ...newPosts]);
         setPage((prevPage) => prevPage + 1);
@@ -34,28 +37,33 @@ export default function Home() {
     [isLoading, page_size]
   );
 
-  useEffect(() => {
-    return () => {
-      setPosts([]); // Cleanup posts when the component unmounts
-      setPage(1); // Reset page to 1
-      setHasMore(true); // Ensure more posts are available on next load
-    };
-  }, []);
-
+  // 加载更多帖子的函数
   const loadMorePosts = () => {
     if (!isLoading && hasMore) {
-      // Increment page number
       loadPosts(page);
     }
   };
+
+  // 对 loadMorePosts 进行防抖处理，延迟 300ms
+  const debouncedLoadMorePosts = useDebounce(loadMorePosts, 300);
+
+  // 组件卸载时重置状态
+  useEffect(() => {
+    return () => {
+      setPosts([]);
+      setPage(1);
+      setHasMore(true); // 确保下次加载时有更多帖子
+    };
+  }, []);
+
   return (
     <div className="max-w-3xl mx-auto p-4">
       <TodoList />
       <Counter />
       <Auth />
-      <ThemeSwitcher></ThemeSwitcher>
+      <ThemeSwitcher />
       <InfiniteScroll
-        loadMore={loadMorePosts}
+        loadMore={debouncedLoadMorePosts} // 使用防抖后的函数
         isLoading={isLoading}
         hasMore={hasMore}
       >

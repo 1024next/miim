@@ -3,6 +3,7 @@ import authReducer from "./authSlice";
 import counterReducer from "./counterSlice";
 import todoReducer from "./todoSlice";
 import themeReducer from "./themeSlice";
+import modalReducer from "./modalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     counter: counterReducer,
     todo: todoReducer,
     theme: themeReducer,
+    modal: modalReducer,
   },
 });
 

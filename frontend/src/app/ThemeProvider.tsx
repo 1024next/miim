@@ -15,8 +15,8 @@ export default function ThemeProvider({
   const theme = useSelector((state: RootState) => state.theme.theme);
 
   useEffect(() => {
-    dispatch(initTheme()); // ✅ 只在客户端初始化 Redux 主题
-  }, [dispatch]);
+    dispatch(initTheme());
+  }, [dispatch, theme]);
 
   useEffect(() => {
     if (document.documentElement.classList.contains(theme)) return;

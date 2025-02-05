@@ -1,56 +1,52 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 import styles from "./Header.module.scss"; // 引入CSS模块
-
-// 导航链接数据
+import { openModal, openPersistentModal } from "@/store/modalSlice";
+import { ModalEnum } from "@/enum/ModalEnum";
 const navLinks = [
   { href: "/", label: "首页" },
   { href: "/createPost", label: "Post" },
-  // { href: "/about", label: "关于" },
-  // { href: "/contact", label: "联系" },
 ];
 
-// 导出 Header 组件
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.headerInner}>
-          {/* Logo */}
           <Link href="/" className={styles.logo}></Link>
 
-          {/* Desktop Menu */}
           <nav className={styles.desktopNav}>
             {navLinks.map(({ href, label }) => (
               <Link key={href} href={href} className={styles.navLink}>
                 {label}
               </Link>
             ))}
+            <button
+              onClick={() =>
+                dispatch(openPersistentModal(ModalEnum.LoginModal))
+              }
+            >
+              打开登录弹窗
+            </button>
+            <button
+              onClick={() =>
+                dispatch(openPersistentModal(ModalEnum.SignupModal))
+              }
+            >
+              打开注册弹窗
+            </button>
+            <button
+              onClick={() =>
+                dispatch(openModal({ title: "弹窗 3", content: "内容 1" }))
+              }
+            >
+              打开普通弹窗
+            </button>
           </nav>
-
-          {/* Mobile Menu Button */}
-          <button
-            className={styles.mobileMenuButton}
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle Menu"
-          >
-            ☰
-          </button>
         </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <nav className={styles.mobileNav}>
-            {navLinks.map(({ href, label }) => (
-              <Link key={href} href={href} className={styles.navLink}>
-                {label}
-              </Link>
-            ))}
-          </nav>
-        )}
       </div>
     </header>
   );

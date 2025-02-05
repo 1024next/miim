@@ -12,7 +12,6 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
   return (
     <Provider store={store}>
-      {/* {children} */}
       <ThemeProvider>{children}</ThemeProvider>
     </Provider>
   );

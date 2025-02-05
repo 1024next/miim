@@ -9,9 +9,8 @@ interface ThemeState {
 
 // 初始化 Redux state，默认值为 "system" (避免 SSR 中的 null 类型)
 const initialState: ThemeState = {
-  theme: Theme.System,
+  theme: getCookiesTheme() as Theme,
 };
-
 const themeSlice = createSlice({
   name: "theme",
   initialState,

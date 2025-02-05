@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
 type InfiniteScrollProps = {
-  loadMore: () => void; // Function to load more data
-  isLoading: boolean; // Whether loading is in progress
-  hasMore: boolean; // Whether more data is available
-  children: React.ReactNode; // Child elements to be wrapped
+  loadMore: () => void; // 加载更多数据的函数
+  isLoading: boolean; // 是否正在加载中
+  hasMore: boolean; // 是否还有更多数据
+  children: React.ReactNode; // 要包裹的子元素
 };
 
 const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
@@ -19,27 +19,26 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-
-        // Ensure loadMore is only triggered when it's visible, and loading isn't already happening
+        // 确保只有在元素可见并且没有正在加载时才触发loadMore
         if (entry.isIntersecting && !isLoading && hasMore) {
-          console.log("Load more triggered"); // Debugging to check loadMore is called
-          loadMore(); // Trigger loading more data when element is in view
+          console.log("Load more triggered"); // 用于调试，检查loadMore是否被调用
+          loadMore(); // 当元素可见时触发加载更多数据
         }
       },
       {
-        rootMargin: "100px", // Trigger load 100px before the element is in view
-        threshold: 0.5, // Trigger when 50% of the trigger element is in view
+        rootMargin: "100px", // 在元素进入视口前100px时触发加载
+        threshold: 0.5, // 当触发元素的50%可见时触发
       }
     );
 
     const triggerElement = triggerRef.current;
     if (triggerElement) {
-      observer.observe(triggerElement); // Start observing the trigger element
+      observer.observe(triggerElement); // 开始观察触发元素
     }
 
     return () => {
       if (triggerElement) {
-        observer.unobserve(triggerElement); // Clean up the observer when component unmounts
+        observer.unobserve(triggerElement); // 组件卸载时清理观察器
       }
     };
   }, [isLoading, hasMore, loadMore]);
@@ -59,11 +58,11 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
         }}
       >
         {isLoading ? (
-          <p>Loading...</p>
+          <p>加载中...</p> // 显示加载中
         ) : hasMore ? (
-          <p>Scroll down to load more...</p>
+          <p>向下滚动以加载更多...</p> // 提示用户向下滚动
         ) : (
-          <p>No more data to load.</p>
+          <p>没有更多数据可以加载。</p> // 提示用户没有更多数据
         )}
       </div>
     </div>
