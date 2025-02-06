@@ -24,6 +24,8 @@ export default function CommentSection() {
       timestamp: "2025-01-31 11:00",
     },
   ]);
+
+  21341234123
   const [newComment, setNewComment] = useState("");
 
   const handleAddComment = () => {
