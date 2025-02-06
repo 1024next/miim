@@ -1,22 +1,20 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import PostList from "@/components/PostList";
+import PostList from "@/app/components/PostList";
 import CommonApi from "@/api/Common";
 import { Post } from "@/types/post";
-import InfiniteScroll from "@/components/utils/InfiniteScroll";
-import Counter from "@/components/utils/Counter";
-import Auth from "@/components/utils/Auth";
-import TodoList from "@/components/utils/TodoList";
-import ThemeSwitcher from "@/components/utils/ThemeSwitcher";
+import InfiniteScroll from "@/app/components/utils/InfiniteScroll";
+import Counter from "@/app/components/utils/Counter";
+import Auth from "@/app/components/utils/Auth";
+import TodoList from "@/app/components/utils/TodoList";
+import ThemeSwitcher from "@/app/components/utils/ThemeSwitcher";
 import useDebounce from "@/hooks/useDebounce"; // 引入 useDebounce
-
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const page_size = 10;
-
   // 加载帖子列表的函数
   const loadPosts = useCallback(
     async (page: number) => {
@@ -38,9 +36,9 @@ export default function Home() {
   );
 
   // 加载更多帖子的函数
-  const loadMorePosts = () => {
+  const loadMorePosts = async () => {
     if (!isLoading && hasMore) {
-      loadPosts(page);
+      await loadPosts(page);
     }
   };
 

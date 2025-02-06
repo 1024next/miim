@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import CommentSection from "@/components/CommentSection";
+import CommentSection from "@/app/components/CommentSection";
 import CommonApi from "@/api/Common";
 import styles from "./PostPage.module.scss"; // 导入CSS模块
 

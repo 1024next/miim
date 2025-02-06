@@ -1,23 +1,27 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useDispatch } from "react-redux";
 import styles from "./Header.module.scss"; // 引入CSS模块
 import { openModal, openPersistentModal } from "@/store/modalSlice";
 import { ModalEnum } from "@/enum/ModalEnum";
+import LanguageSwitcher from "../utils/LanguageSwitcher";
+import { useTranslations } from "next-intl";
+import React from "react";
 const navLinks = [
   { href: "/", label: "首页" },
   { href: "/createPost", label: "Post" },
 ];
 
-export default function Header() {
+export default React.memo(function Header() {
   const dispatch = useDispatch();
-
+  const t = useTranslations();
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.headerInner}>
           <Link href="/" className={styles.logo}></Link>
-
+          {t("hello")}
+          <LanguageSwitcher></LanguageSwitcher>
           <nav className={styles.desktopNav}>
             {navLinks.map(({ href, label }) => (
               <Link key={href} href={href} className={styles.navLink}>
@@ -50,4 +54,4 @@ export default function Header() {
       </div>
     </header>
   );
-}
+});

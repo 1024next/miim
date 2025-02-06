@@ -8,7 +8,7 @@ import {
   openModal,
 } from "@/store/modalSlice";
 import { useEffect } from "react";
-import styles from "@/components/utils/Modal/Modal.module.scss";
+import styles from "./Modal.module.scss";
 import ModalMaps from "./ModalMaps";
 import React from "react";
 

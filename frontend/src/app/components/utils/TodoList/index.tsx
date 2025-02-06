@@ -4,8 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/store";
 import { addTodo, toggleTodo, deleteTodo } from "@/store/todoSlice";
 import { useState } from "react";
+import React from "react";
+import { useTranslations } from "next-intl";
 
-export default function TodoList() {
+export default React.memo(function TodoList() {
+  const t = useTranslations();
   const todos = useSelector((state: RootState) => state.todo.todos);
   const dispatch = useDispatch<AppDispatch>();
   const [text, setText] = useState("");
@@ -30,7 +33,7 @@ export default function TodoList() {
           >
             {todo.text}
             <button onClick={() => dispatch(toggleTodo(todo.id))}>
-              Toggle
+              {t("hello")}
             </button>
             <button onClick={() => dispatch(deleteTodo(todo.id))}>
               Delete
@@ -40,4 +43,4 @@ export default function TodoList() {
       </ul>
     </div>
   );
-}
+});

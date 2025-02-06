@@ -1,5 +1,5 @@
 // utils/api.ts
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios from "axios";
 
 // 设置 API 基础 URL
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.example.com";
@@ -14,7 +14,7 @@ const request = axios.create({
 
 // 请求拦截器（可选）
 request.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  (config) => {
     // 在这里你可以做全局的请求配置修改
     // 例如加入认证 token（如果需要）
     // const token = localStorage.getItem('token');
@@ -32,7 +32,7 @@ request.interceptors.request.use(
 
 // 响应拦截器（可选）
 request.interceptors.response.use(
-  (response: AxiosResponse) => {
+  (response: any) => {
     // 你可以在这里统一处理响应数据
     console.log("Response received:", response);
     return response.data; // 返回响应数据（或者进行格式化处理）
